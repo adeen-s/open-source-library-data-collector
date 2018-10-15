@@ -73,6 +73,7 @@ We welcome direct contributions to the open-source-library-data-collector code b
 
 ```bash
 git clone https://github.com/sendgrid/open-source-library-data-collector.git
+git checkout development
 cd open-source-library-data-collector
 virtualenv venv
 cp .env_sample .env
@@ -146,7 +147,7 @@ Send email through SendGrid.
 <a name="testing"></a>
 ## Testing
 
-All PRs require passing tests before the PR will be reviewed.
+The PRs must be sent on the `development` branch.
 
 All test files are in the [`test`](https://github.com/sendgrid/open-source-library-data-collector/tree/master/test) directory.
 
@@ -209,14 +210,15 @@ Please run your code through:
 2. If you cloned a while ago, get the latest changes from upstream:
 
    ```bash
-   git checkout <dev-branch>
-   git pull upstream <dev-branch>
+   git checkout development
+   git pull upstream development
    ```
 
 3. Create a new topic branch (off the main project development branch) to
    contain your feature, change, or fix:
 
    ```bash
+   git checkout development
    git checkout -b <topic-branch-name>
    ```
 
@@ -233,7 +235,7 @@ Please run your code through:
 5. Locally merge (or rebase) the upstream development branch into your topic branch:
 
    ```bash
-   git pull [--rebase] upstream master
+   git pull [--rebase] upstream development
    ```
 
 6. Push your topic branch up to your fork:
@@ -243,8 +245,8 @@ Please run your code through:
    ```
 
 7. [Open a Pull Request](https://help.github.com/articles/using-pull-requests/)
-    with a clear title and description against the `master` branch. All tests must be passing before we will review the PR.
-    
+    with a clear title and description against the `development` branch. All tests must be passing before we will review the PR.
+
 ## Code Reviews<a name="code-reviews"></a>
 If you can, please look at open PRs and review them. Give feedback and help us merge these PRs much faster! If you don't know how, GitHub has some <a href="https://help.github.com/articles/about-pull-request-reviews/">great information on how to review a Pull Request.</a>
 
