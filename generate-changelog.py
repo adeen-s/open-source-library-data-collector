@@ -8,8 +8,8 @@ def get_last_release():
         m = re.search(r"## \[.*\]", data)
         return ("".join(m.group(0).rsplit(" ", 1)[1:]))[1:-1]
 
-def get_new_release():
-    new_release = input("Last release version was {}, \nEnter the new version number: ".format(get_last_release()))
+def get_new_release(old_version):
+    new_release = input("Last release version was {}, \nEnter the new version number: ".format(old_version))
     return new_release
 
 def get_changes():
@@ -31,10 +31,21 @@ def get_changes():
     return changes
 
 def generate_changelog():
-    version = get_new_release()
+    old_version = get_last_release()
+    version = get_new_release(old_version)
     changelog = "## [{}] - {}\n".format(version, str(datetime.datetime.today()).split()[0])
     changelog += "### Fixed"
     changelog += get_changes()
+    changelog += "\n\n"
+    tmp = ""
+    with open("CHANGELOG.md", 'r') as file:
+        data = file.read()
+        tmp = data[:data.find("## [{}]".format(old_version))]
+        tmp += changelog
+        tmp += data[data.find("## [{}]".format(old_version)):]
+        tmp = "".join(tmp)
+    with open("CHANGELOG.md", 'w') as file:
+        file.write(tmp)
     return changelog
 
 print(generate_changelog())
