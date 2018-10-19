@@ -34,7 +34,7 @@ def generate_changelog():
     old_version = get_last_release()
     version = get_new_release(old_version)
     changelog = "## [{}] - {}\n".format(version, str(datetime.datetime.today()).split()[0])
-    changelog += "### Fixed"
+    changelog += "### Fixed\n"
     changelog += get_changes()
     changelog += "\n\n"
     tmp = ""
@@ -46,6 +46,5 @@ def generate_changelog():
         tmp = "".join(tmp)
     with open("CHANGELOG.md", 'w') as file:
         file.write(tmp)
-    return changelog
 
-print(generate_changelog())
+generate_changelog()
