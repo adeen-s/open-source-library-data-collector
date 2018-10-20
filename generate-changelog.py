@@ -9,8 +9,12 @@ def get_last_release():
         return ("".join(m.group(0).rsplit(" ", 1)[1:]))[1:-1]
 
 def get_new_release(old_version):
-    new_release = input("Last release version was {}, \nEnter the new version number: ".format(old_version))
-    return new_release
+    while True:
+        new_release = input("Last release version was {}, \nEnter the new version number: ".format(old_version))
+        if new_release == old_version:
+            print("New release cannot be same as the last release")
+            continue
+        return new_release
 
 def get_changes():
     changes = []
@@ -28,14 +32,16 @@ def get_changes():
                 changes.append("{}, #{}".format(pr["title"], pr["number"]))
             changes.append("Big thanks to @{} for the PR!".format(pr["user"]["login"]))
     changes = "\n- ".join(changes)
+    changes = "- " + changes
     return changes
 
 def generate_changelog():
     old_version = get_last_release()
     version = get_new_release(old_version)
     changelog = "## [{}] - {}\n".format(version, str(datetime.datetime.today()).split()[0])
-    changelog += "### Fixed\n"
-    changelog += get_changes()
+    release_notes = "### Fixed\n"
+    release_notes += get_changes()
+    changelog += release_notes
     changelog += "\n\n"
     tmp = ""
     with open("CHANGELOG.md", 'r') as file:
@@ -46,5 +52,6 @@ def generate_changelog():
         tmp = "".join(tmp)
     with open("CHANGELOG.md", 'w') as file:
         file.write(tmp)
+    print("Here are the release notes\n---------------\n{}\n---------------".format(release_notes))
 
 generate_changelog()
