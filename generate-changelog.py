@@ -1,6 +1,7 @@
-import requests
-import re
 import datetime
+import re
+
+import requests
 
 def get_last_release():
     with open("CHANGELOG.md") as file:
@@ -18,9 +19,13 @@ def get_new_release(old_version):
 
 def get_changes():
     changes = []
-    link = "https://api.github.com/repos/sendgrid/open-source-library-data-collector/"
-    releases = requests.get(link + "releases").json()
-    pulls = requests.get(link + "pulls?state=closed&per_page=100").json()
+    link = "https://api.github.com/repos/sendgrid/open-source-library-data-collector"
+    releases = requests.get('{}/releases'.format(link)).json()
+    params = {
+        'state': 'closed',
+        'per_page': 100
+    }
+    pulls = requests.get('{}/pulls'.format(link), params=params).json()
     for pr in pulls:
         if(pr["merged_at"] and pr["merged_at"] > releases[0]["created_at"]):
             message = "".join(pr["body"].rsplit("-->", 1)[1:])
@@ -38,7 +43,7 @@ def get_changes():
 def generate_changelog():
     old_version = get_last_release()
     version = get_new_release(old_version)
-    changelog = "## [{}] - {}\n".format(version, str(datetime.datetime.today()).split()[0])
+    changelog = "## [{}] - {}\n".format(version, datetime.datetime.today().date())
     release_notes = "### Fixed\n"
     release_notes += get_changes()
     changelog += release_notes
